@@ -1,0 +1,374 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Kafka与Spark Streaming整合 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../../Kafka/">
+            
+                <a href="../../Kafka/">
+            
+                    
+                    Kafka
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../../Kafka/1-vue.html">
+            
+                <a href="../../Kafka/1-vue.html">
+            
+                    
+                    什么是kafka
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../../Kafka/2-vue.html">
+            
+                <a href="../../Kafka/2-vue.html">
+            
+                    
+                    Kafka Streams
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" >
+            
+                <span>
+            
+                    
+                    实战
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter active" data-level="1.2.3.1" data-path="KafkaAndSparkStreaming.html">
+            
+                <a href="KafkaAndSparkStreaming.html">
+            
+                    
+                    Kafka与Spark Streaming整合
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../.." >Kafka与Spark Streaming整合</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="kafka&#x4E0E;spark-streaming&#x6574;&#x5408;">Kafka&#x4E0E;Spark Streaming&#x6574;&#x5408;</h1>
+<h2 id="&#x6982;&#x8FF0;">&#x6982;&#x8FF0;</h2>
+<p>Spark Streaming&#x662F;&#x4E00;&#x4E2A;&#x53EF;&#x6269;&#x5C55;&#xFF0C;&#x9AD8;&#x541E;&#x5410;&#xFF0C;&#x5BB9;&#x9519;&#x80FD;&#x529B;&#x5F3A;&#x7684;&#x5B9E;&#x65F6;&#x6D41;&#x5F0F;&#x5904;&#x7406;&#x5904;&#x7406;&#x7CFB;&#x7EDF;&#x3002;&#x4E00;&#x822C;&#x7684;&#x7CFB;&#x7EDF;&#x67B6;&#x6784;&#x56FE;&#x662F;&#xFF0C;&#x6570;&#x636E;&#x4ECE;&#x4E00;&#x4E2A;&#x6E90;&#x70B9;&#xFF0C;&#x7ECF;&#x8FC7;Sparing Streaming&#x5904;&#x7406;&#xFF0C;&#x6700;&#x540E;&#x6C47;&#x805A;&#x5230;&#x4E00;&#x4E2A;&#x7CFB;&#x7EDF;&#x3002;Spark Streaming&#x7684;&#x6570;&#x636E;&#x6765;&#x6E90;&#x53EF;&#x4EE5;&#x975E;&#x5E38;&#x4E30;&#x5BCC;&#xFF0C;&#x6BD4;&#x5982;Kafka, Flume, Twitter, ZeroMQ, Kinesis &#x6216;&#x8005;&#x662F;&#x4EFB;&#x4F55;&#x7684;TCP sockets&#x7A0B;&#x5E8F;&#x3002;&#x5BF9;&#x4E8E;&#x6570;&#x636E;&#x7684;&#x5904;&#x7406;&#xFF0C;Spark Streaming&#x63D0;&#x4F9B;&#x4E86;&#x975E;&#x5E38;&#x4E30;&#x5BCC;&#x7684;&#x9AD8;&#x7EA7;api&#xFF0C;&#x4F8B;&#x5982;map&#xFF0C;redue&#xFF0C;joini&#x548C;&#x7A97;&#x53E3;&#x51FD;&#x6570;&#x7B49;&#x7B49;&#x3002;&#x6570;&#x636E;&#x5904;&#x7406;&#x5B8C;&#x6210;&#x540E;&#xFF0C;&#x53EF;&#x4EE5;&#x5B58;&#x50A8;&#x5230;&#x5176;&#x4ED6;&#x5730;&#x65B9;&#xFF0C;&#x6BD4;&#x5982;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#xFF0C;&#x5BF9;&#x8C61;&#x5B58;&#x50A8;&#xFF0C;&#x6570;&#x636E;&#x5E93;&#x3002;&#x5178;&#x578B;&#x7684;&#x6570;&#x636E;&#x5904;&#x7406;&#x6D41;&#x7A0B;&#x56FE;&#xFF1A;
+<img src="streaming-arch.png" alt="avatar"></p>
+<h3 id="&#x6982;&#x5FF5;&#x7B80;&#x4ECB;">&#x6982;&#x5FF5;&#x7B80;&#x4ECB;</h3>
+<p>RDD&#xFF1A;Resilient Distributed Datasets&#xFF0C;&#x5F39;&#x6027;&#x5206;&#x90E8;&#x7F72;&#x6570;&#x636E;&#x96C6;&#xFF0C;&#x652F;&#x6301;&#x4E24;&#x79CD;&#x64CD;&#x4F5C;&#xFF1A;&#x8F6C;&#x6362;&#xFF08;transformation&#xFF09;&#x4ECE;&#x73B0;&#x6709;&#x7684;&#x6570;&#x636E;&#x96C6;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x6570;&#x636E;&#x96C6;&#xFF1B;&#x52A8;&#x4F5C;&#xFF08;actions&#xFF09;&#x5728;&#x6570;&#x636E;&#x96C6;&#x4E0A;&#x8FD0;&#x884C;&#x8BA1;&#x7B97;&#x540E;&#xFF0C;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;&#x503C;&#x7ED9;&#x9A71;&#x52A8;&#x7A0B;&#x5E8F;&#x3002;&#x5728;&#x8FD9;&#x91CC;&#x7B80;&#x5355;&#x7406;&#x89E3;&#x4E3A;&#x67D0;&#x4E2A;&#x65F6;&#x95F4;&#x7247;&#x7684;&#x6570;&#x636E;&#x96C6;&#x5408;&#x5373;&#x53EF;&#x3002;
+<br><br>
+DStream&#xFF1A;&#x548C;RDD&#x6982;&#x5FF5;&#x6709;&#x70B9;&#x7C7B;&#x4F3C;&#xFF0C;&#x662F;RDD&#x7684;&#x96C6;&#x5408;&#xFF0C;&#x4EE3;&#x8868;&#x7740;&#x6574;&#x4E2A;&#x6570;&#x636E;&#x6D41;&#x3002;&#x7B80;&#x5355;&#x6765;&#x8BF4;Spark Streaming&#x4E2D;&#x7684;&#x6570;&#x636E;&#x91CF;&#x5C31;&#x662F;DStream&#xFF0C;&#x7136;&#x540E;&#x6BCF;&#x4E2A;&#x65F6;&#x95F4;&#x7247;&#x7684;&#x6570;&#x636E;&#x5C31;&#x662F;RDD&#x3002;</p>
+<h2 id="kafka&#x4E0E;spark-streaming&#x6574;&#x5408;">Kafka&#x4E0E;Spark Streaming&#x6574;&#x5408;</h2>
+<h2 id="&#x6574;&#x5408;&#x65B9;&#x5F0F;">&#x6574;&#x5408;&#x65B9;&#x5F0F;</h2>
+<p>Kafka&#x4E0E;Spark Streaming&#x6574;&#x5408;&#xFF0C;&#x9996;&#x5148;&#x9700;&#x8981;&#x4ECE;Kafka&#x8BFB;&#x53D6;&#x6570;&#x636E;&#x8FC7;&#x6765;&#xFF0C;&#x8BFB;&#x53D6;&#x6570;&#x636E;&#x6709;&#x4E24;&#x79CD;&#x65B9;&#x5F0F;</p>
+<ul>
+<li>&#x65B9;&#x6CD5;&#x4E00;&#xFF1A;Receiver-based <br>
+&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x4F7F;&#x7528;&#x4E00;&#x4E2A;Receiver&#x63A5;&#x6536;Kafka&#x7684;&#x6D88;&#x606F;&#xFF0C;&#x5982;&#x679C;&#x4F7F;&#x7528;&#x9ED8;&#x8BA4;&#x7684;&#x914D;&#x7F6E;&#xFF0C;&#x5B58;&#x5728;&#x4E22;&#x6570;&#x636E;&#x7684;&#x98CE;&#x9669;&#xFF0C;&#x56E0;&#x4E3A;&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x4F1A;&#x628A;&#x4ECE;kafka&#x63A5;&#x6536;&#x5230;&#x7684;&#x6D88;&#x606F;&#x5B58;&#x653E;&#x5230;Spark&#x7684;exectors&#xFF0C;&#x7136;&#x540E;&#x518D;&#x542F;&#x52A8;streaming&#x4F5C;&#x4E1A;&#x533A;&#x5904;&#x7406;&#xFF0C;&#x5982;&#x679C;exectors&#x6302;&#x4E86;&#xFF0C;&#x90A3;&#x4E48;&#x6D88;&#x606F;&#x53EF;&#x80FD;&#x5C31;&#x4E22;&#x5931;&#x4E86;&#x3002;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x5F00;&#x542F;Write Ahead Logs&#x6765;&#x4FDD;&#x8BC1;&#x6570;&#x636E;&#x7684;&#x53EF;&#x9760;&#x6027;&#xFF08;Spark 1.2&#x540E;&#x5F00;&#x59CB;&#x652F;&#x6301;&#xFF09;&#xFF0C;&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x548C;&#x5927;&#x591A;&#x6570;&#x5B58;&#x50A8;&#x7CFB;&#x7EDF;&#x7684;Write Ahead Logs&#x7C7B;&#x4F3C;&#xFF0C;Spark&#x4F1A;&#x628A;&#x63A5;&#x6536;&#x5230;&#x7684;&#x6D88;&#x606F;&#x53CA;kafka&#x6D88;&#x606F;&#x504F;&#x79FB;&#x5B58;&#x653E;&#x5230;&#x5206;&#x5E03;&#x5F0F;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x4E2D;&#xFF08;&#x4F8B;&#x5982;HDFS&#xFF09;&#xFF0C;&#x5982;&#x679C;&#x8FD0;&#x884C;&#x671F;&#x95F4;&#x51FA;&#x73B0;&#x4E86;&#x6545;&#x969C;&#xFF0C;&#x90A3;&#x4E48;&#x8FD9;&#x4E9B;&#x4FE1;&#x606F;&#x4F1A;&#x88AB;&#x7528;&#x4E8E;&#x6545;&#x969C;&#x6062;&#x590D;&#x3002;</li>
+<li>&#x65B9;&#x6CD5;&#x4E8C;&#xFF1A;Direc<br>
+&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x662F;Spark 1.3&#x5F15;&#x5165;&#x7684;&#xFF0C;Spark&#x4F1A;&#x521B;&#x5EFA;&#x548C;Kafka partition&#x4E00;&#x4E00;&#x5BF9;&#x5E94;&#x7684;&#x7684;RDD&#x5206;&#x533A;&#xFF0C;&#x7136;&#x540E;&#x5468;&#x671F;&#x6027;&#x7684;&#x53BB;&#x8F6E;&#x8BE2;&#x83B7;&#x53D6;&#x5206;&#x533A;&#x4FE1;&#x606F;&#xFF0C;&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x548C;Receier-based&#x4E0D;&#x4E00;&#x6837;&#x7684;&#x662F;&#xFF0C;&#x5B83;&#x4E0D;&#x9700;&#x8981;Write Ahead Logs&#xFF0C;&#x800C;&#x662F;&#x901A;&#x8FC7;check point&#x7684;&#x673A;&#x5236;&#x8BB0;&#x5F55;kafka&#x7684;offset&#xFF0C;&#x901A;&#x8FC7;check point&#x673A;&#x5236;&#xFF0C;&#x4FDD;&#x8BC1;Kafka&#x4E2D;&#x7684;&#x6D88;&#x606F;&#x4E0D;&#x4F1A;&#x88AB;&#x9057;&#x6F0F;&#x3002;&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x76F8;&#x5BF9;&#x4E8E;&#x7B2C;&#x4E00;&#x79CD;&#x65B9;&#x5F0F;&#x6709;&#x591A;&#x79CD;&#x4F18;&#x70B9;&#xFF0C;&#x4E00;&#x662F;&#x5929;&#x7136;&#x652F;&#x6301;&#x5E76;&#x53D1;&#xFF0C;&#x5EFA;&#x4E86;&#x4E86;&#x548C;Kafka&#x7684;partition&#x5206;&#x533A;&#x5BF9;&#x5E94;&#x7684;RDD&#x5206;&#x533A;&#xFF0C;&#x7B2C;&#x4E8C;&#x70B9;&#x662F;&#x66F4;&#x9AD8;&#x6548;&#xFF0C;&#x4E0D;&#x9700;&#x8981;write ahead logs&#xFF0C;&#x51CF;&#x5C11;&#x4E86;&#x5199;&#x78C1;&#x76D8;&#x6B21;&#x6570;&#xFF0C;&#x7B2C;&#x4E09;&#x79CD;&#x4F18;&#x70B9;&#x662F;&#x53EF;&#x4EE5;&#x652F;&#x6301;exactly-once&#x8BED;&#x4E49;&#xFF0C;&#x901A;&#x8FC7;checkpoint&#x673A;&#x5236;&#x8BB0;&#x5F55;&#x4E86;kafka&#x7684;offset&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x901A;&#x8FC7;zk&#x6216;&#x8005;kafka&#x6765;&#x8BB0;&#x5F55;offset&#x80FD;&#x907F;&#x514D;&#x5206;&#x5E03;&#x5F0F;&#x7CFB;&#x7EDF;&#x4E2D;&#x6570;&#x636E;&#x4E0D;&#x4E00;&#x81F4;&#x7684;&#x95EE;&#x9898;&#xFF0C;&#x4ECE;&#x800C;&#x80FD;&#x652F;&#x6301;exactly-once&#x8BED;&#x4E49;&#xFF0C;&#x5F53;&#x7136;&#x8FD9;&#x91CC;&#x4E0D;&#x662F;&#x8BF4;&#x8FD9;&#x6837;&#x5C31;&#x5B8C;&#x5168;&#x662F;exactly-once&#x4E86;&#xFF0C;&#x8FD8;&#x9700;&#x8981;&#x6D88;&#x8D39;&#x7AEF;&#x914D;&#x5408;&#x505A;&#x6D88;&#x606F;&#x5E42;&#x7B49;&#x6216;&#x4E8B;&#x7269;&#x5904;&#x7406;&#x3002;&#x8FD9;&#x79CD;&#x6A21;&#x5F0F;&#x662F;&#x8F83;&#x65B0;&#x7684;&#x6A21;&#x5F0F;&#xFF0C;&#x63A8;&#x8350;&#x4F7F;&#x7528;&#x8BE5;&#x6A21;&#x5F0F;&#xFF0C;&#x7B2C;&#x4E00;&#x79CD;&#x65B9;&#x5F0F;&#x5DF2;&#x7ECF;&#x9010;&#x6B65;&#x88AB;&#x6DD8;&#x6C70;&#x3002;</li>
+</ul>
+<h2 id="&#x6574;&#x5408;&#x793A;&#x4F8B;">&#x6574;&#x5408;&#x793A;&#x4F8B;</h2>
+<p>&#x4E0B;&#x9762;&#x4F7F;&#x7528;&#x4E00;&#x4E2A;&#x793A;&#x4F8B;&#xFF0C;&#x5C55;&#x793A;&#x5982;&#x4F55;&#x6574;&#x5408;Kafka&#x548C;Spark Streaming&#xFF0C;&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x4E2D;&#xFF0C;&#x4F7F;&#x7528;&#x4E00;&#x4E2A;&#x751F;&#x4EA7;&#x8005;&#x4E0D;&#x65AD;&#x5F80;Kafka&#x968F;&#x673A;&#x53D1;&#x9001;&#x6570;&#x5B57;&#xFF0C;&#x7136;&#x540E;&#x901A;&#x8FC7;Spark Streaming&#x7EDF;&#x8BA1;&#x65F6;&#x95F4;&#x7247;&#x6BB5;&#x5185;&#x6570;&#x5B57;&#x4E4B;&#x548C;&#x3002;<br>
+1.&#x5F80;kafka&#x968F;&#x673A;&#x53D1;&#x9001;&#x6570;&#x5B57;&#x4EE3;&#x7801;&#xFF1A;</p>
+<pre><code>        Properties properties = new Properties();
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
+        properties.put(ProducerConfig.CLIENT_ID_CONFIG, &quot;spark-producer-demo-client&quot;);
+        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+
+        Producer&lt;String,String&gt; producer = new KafkaProducer&lt;&gt;(properties);
+
+        Random random = new Random();
+        while (true) {
+            int value = random.nextInt(10);
+            ProducerRecord&lt;String, String&gt; message =
+                    new ProducerRecord&lt;&gt;(topic, value+&quot;&quot;);
+            producer.send(message, (recordMetadata, e) -&gt; {
+                if (recordMetadata != null) {
+                    System.out.println(recordMetadata.topic() + &quot;-&quot; + recordMetadata.partition() + &quot;:&quot; +
+                            recordMetadata.offset());
+                }
+            });
+            TimeUnit.SECONDS.sleep(1);
+</code></pre><p>2.&#x63D0;&#x4EA4;&#x5230;spark&#x96C6;&#x7FA4;&#x4EE3;&#x7801;&#xFF0C;&#x7528;&#x4E8E;&#x7EDF;&#x8BA1;2&#x79D2;&#x65F6;&#x95F4;&#x95F4;&#x9694;&#x7684;&#x6570;&#x5B57;&#x4E4B;&#x548C;&#xFF0C;&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x7684;&#x662F;Direct&#x6A21;&#x5F0F;&#xFF1A;</p>
+<pre><code> def main(args: Array[String]): Unit = {
+    val sparkConf = new SparkConf().setMaster(&quot;local[2]&quot;)
+      .setAppName(&quot;StreamingWithKafka&quot;)
+    val ssc = new StreamingContext(sparkConf, Seconds(2)) // 1
+    ssc.checkpoint(checkpointDir)
+
+    val kafkaParams = Map[String, Object](
+      ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -&gt; brokers,
+      ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG -&gt;
+        classOf[StringDeserializer],
+      ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG -&gt;
+        classOf[StringDeserializer],
+      ConsumerConfig.GROUP_ID_CONFIG -&gt; group,
+      ConsumerConfig.AUTO_OFFSET_RESET_CONFIG -&gt; &quot;latest&quot;,
+      ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG -&gt; (false:java.lang.Boolean)
+    )
+
+    val stream = KafkaUtils.createDirectStream[String, String](
+      ssc, PreferConsistent, // 2
+      Subscribe[String, String](List(topic), kafkaParams))
+    val value = stream.map(record =&gt; {
+      val intVal = Integer.valueOf(record.value())
+      println(intVal)
+      intVal
+    }).reduce(_+_)
+
+    value.print()
+
+    ssc.start
+    ssc.awaitTermination
+  }
+</code></pre><p>&#x4E0A;&#x9762;&#x4EE3;&#x7801;&#x4E2D;1&#x5904;&#x7684;&#x4EE3;&#x7801;&#x8868;&#x793A;&#x805A;&#x5408;&#x5904;&#x7406;&#x7684;&#x65F6;&#x95F4;&#x5206;&#x7247;&#x4E3A;2&#x79D2;&#xFF0C;&#x8BA1;&#x7B97;&#x4E24;&#x79D2;&#x5185;&#x7684;&#x968F;&#x673A;&#x6570;&#x4E4B;&#x548C;&#x3002;2&#x5904;&#x7684;&#x4EE3;&#x7801;&#x7528;&#x4E8E;&#x6307;&#x5B9A;spark&#x6267;&#x884C;&#x5668;&#x4E0A;&#x9762;&#x7684;kafka consumer&#x5206;&#x533A;&#x5206;&#x914D;&#x7B56;&#x7565;&#xFF0C;&#x4E00;&#x5171;&#x6709;&#x4E09;&#x79CD;&#x7C7B;&#x578B;&#xFF0C;PreferConsistent&#x662F;&#x6700;&#x5E38;&#x7528;&#x7684;&#xFF0C;&#x8868;&#x793A;&#x8BA2;&#x9605;&#x4E3B;&#x9898;&#x7684;&#x5206;&#x533A;&#x5747;&#x5300;&#x5206;&#x914D;&#x5230;&#x6267;&#x884C;&#x5668;&#x4E0A;&#x9762;&#xFF0C;&#x7136;&#x540E;&#x8FD8;&#x6709;PreferBrokers&#xFF0C;&#x8FD9;&#x79CD;&#x673A;&#x5236;&#x662F;&#x4F18;&#x5148;&#x5206;&#x914D;&#x5230;&#x548C;broker&#x76F8;&#x540C;&#x673A;&#x5668;&#x7684;&#x6267;&#x884C;&#x5668;&#x4E0A;&#xFF0C;&#x8FD8;&#x6709;&#x4E00;&#x79CD;&#x662F;PreferFixed&#xFF0C;&#x8FD9;&#x79CD;&#x662F;&#x624B;&#x52A8;&#x914D;&#x7F6E;&#xFF0C;&#x7528;&#x7684;&#x6BD4;&#x8F83;&#x5C11;&#x3002;&#x4E0A;&#x9762;&#x7A0B;&#x5E8F;&#x6BCF;&#x6B21;&#x8BA1;&#x7B97;2&#x79D2;&#x65F6;&#x95F4;&#x95F4;&#x9694;&#x5185;&#x7684;&#x6570;&#x5B57;&#x4E4B;&#x548C;&#xFF0C;&#x8F93;&#x5165;&#x4F1A;&#x7C7B;&#x4F3C;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre><code>3
+4
+...
+</code></pre>
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Kafka与Spark Streaming整合","level":"1.2.3.1","depth":3,"previous":{"title":"实战","level":"1.2.3","depth":2,"ref":"","articles":[{"title":"Kafka与Spark Streaming整合","level":"1.2.3.1","depth":3,"path":"kafka/action/KafkaAndSparkStreaming.md","ref":"./kafka/action/KafkaAndSparkStreaming.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kafka/action/KafkaAndSparkStreaming.md","mtime":"2021-01-02T14:35:40.424Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-01-02T14:30:08.235Z"},"basePath":"../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
